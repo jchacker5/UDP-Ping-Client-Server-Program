@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -26,16 +27,26 @@ public class PingClient {
         InetAddress IPAddress = InetAddress.getByName(serverName);
 
         for (int i = 0; i < 10; i++) {
+            // Get the current time
+            long currentTime = System.currentTimeMillis();
+
+            // Format current time for display
+            Date date = new Date(currentTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+            String formattedDate = sdf.format(date);
+
             // Create data and packet to send
-            String sentence = "PING " + i + " " + System.currentTimeMillis();
+            String sentence = "PING " + i + " " + currentTime;
             byte[] sendData = sentence.getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+
+            // Print the attempt with current time
+            System.out.println("[" + formattedDate + "] Attempt #" + i + " Sent: " + sentence);
 
             // Send ping
             clientSocket.send(sendPacket);
 
-            // Print the attempt
-            System.out.println("Sent: " + sentence);
+         
 
             // Create a DatagramPacket for receiving packets.
             byte[] receiveData = new byte[1024];
@@ -51,8 +62,9 @@ public class PingClient {
                 long sentTime = Long.parseLong(modifiedSentence.split(" ")[2]);
                 long rtt = receivedTime - sentTime;
 
-                // Print details
-                System.out.println("Received from server: " + modifiedSentence);
+                // Print details including RTT
+                System.out.println(
+                        "[" + sdf.format(new Date(receivedTime)) + "] Received from server: " + modifiedSentence);
                 System.out.println("RTT: " + rtt + " microseconds");
             } catch (SocketTimeoutException e) {
                 // Print timeout message if we don't get a response
