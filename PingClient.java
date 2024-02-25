@@ -1,10 +1,10 @@
-/**
- * PingServer.java
- */
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+/**
+ * PingServer.java
+ */
 
 public class PingClient {
     public static void main(String[] args) throws Exception {

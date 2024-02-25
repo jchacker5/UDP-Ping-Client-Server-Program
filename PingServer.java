@@ -6,7 +6,8 @@ import java.util.Random;
 /**
  * PingServer.java
  */
-class PingServer {
+
+public class PingServer {
     public static void main(String args[]) throws Exception {
         try (DatagramSocket serverSocket = new DatagramSocket(2014)) {
             byte[] receiveData = new byte[1024]; 
